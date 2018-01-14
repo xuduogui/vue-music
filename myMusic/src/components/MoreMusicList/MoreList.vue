@@ -83,6 +83,7 @@ export default {
     }
     .myflex-item {
         width: 33%;
+        overflow-x: hidden;
     }
 </style>
 

@@ -104,8 +104,7 @@ const actions = {
     },
     // handle recommend music msg
     HANDLERECOMMENDMUSICMSG ({ commit }, obj) {
-        let res = obj.result
-        console.log(res)
+        let res = obj.data.result
         commit('setRecommendMusic', res)
     },
 

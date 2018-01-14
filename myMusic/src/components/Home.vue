@@ -69,8 +69,10 @@
             </ul>
         </div>
         
-        <div>
-            推荐歌曲
+        <div class="cut-box">
+            <div>
+                推荐歌曲
+            </div>
         </div>
         <div v-if="mystate.recommendMusic.length === 0" class="spinner-center">
             <span>加载中</span>
@@ -208,6 +210,7 @@ export default {
     }
     .myflex-item {
         width: 33%;
+        overflow-x: hidden;
     }
     .my-test-style {
         width: 100px;

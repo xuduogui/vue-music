@@ -70,12 +70,13 @@ export default {
 			playMode: '顺序',
 			playModeNum: 0,
 
-			mytest: true
+			mytest: false
         }
     },
     computed: {
         ...mapState({
-            playMusicBox: 'playmusic',
+			playMusicBox: 'playmusic',
+			myPlayList: 'playlist'
         }),
         // 获取dom
         media () {
@@ -88,7 +89,9 @@ export default {
 		
     },
     mounted () {
-        // 获取歌曲信息
+		// 获取歌曲信息
+		// 设置播放列表，根据歌单列表
+		this.$store.commit('updataUrl', this.myPlayList.musicID)
     },
     watch: {
 
