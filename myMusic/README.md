@@ -41,9 +41,9 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 
 
-目前项目尚未上线，可以下载后打包，放入后台程序的public文件夹
+目前项目尚未上线，可以下载后打包，将此项目dist文件夹中的所有文件复制，放入后台程序（另外的程序，见下）的public文件夹
 
-后台我是直接使用了别人的，这里非常感谢该作者提供的帮助
+后台程序我是直接使用了别人的，这里非常感谢该作者提供的帮助
 
 后台程序地址：
   https://github.com/Binaryify/NeteaseCloudMusicApi
