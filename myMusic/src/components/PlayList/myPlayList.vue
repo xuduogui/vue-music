@@ -8,7 +8,9 @@
             :title="list.musicName[ index ]"
             :label="list.musicSinger[ index ]"
             @click.native="setNewMusic( index )"
+            :class="{newclass: musicIndex.musicIndex === index}"
         >
+            <div v-if="musicIndex.musicIndex === index">当前</div>
         </mt-cell>
         <!-- <mt-cell
             v-for="( item, index ) in mystate.recommendMusic"
@@ -29,13 +31,16 @@ export default {
     name: 'myplaylist',
     computed: {
         ...mapState({
-            list: 'playlist'
+            list: 'playlist',
+            musicIndex: 'playmusic'
         })
     },
     methods: {
         setNewMusic (index) {
-            // 选择歌曲播放
-            this.$store.commit('playIndexMusic', index)
+            if (index != this.musicIndex.musicIndex) {
+                // 选择歌曲播放
+                this.$store.commit('playIndexMusic', index)
+            }
         }
     }
 }
@@ -46,6 +51,9 @@ export default {
         width: 100%;
         height: 100%;
         overflow: auto;
+    }
+    .newclass {
+        border: 1px solid #000;
     }
 </style>
 
