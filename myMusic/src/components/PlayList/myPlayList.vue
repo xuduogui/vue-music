@@ -8,7 +8,7 @@
             :title="list.musicName[ index ]"
             :label="list.musicSinger[ index ]"
             @click.native="setNewMusic( index )"
-            :class="{newclass: musicIndex.musicIndex === index}"
+            :class="{ newclass: musicIndex.musicIndex === index, allclass: true }"
         >
             <div v-if="musicIndex.musicIndex === index">当前</div>
         </mt-cell>
@@ -54,6 +54,9 @@ export default {
     }
     .newclass {
         border: 1px solid #000;
+    }
+    .allclass {
+        background-color: transparent;
     }
 </style>
 

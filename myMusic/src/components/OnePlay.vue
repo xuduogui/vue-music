@@ -1,10 +1,17 @@
 <template>
     <div>
-        <audio loop="loop" id="myaudio" preload="auto">
+        <audio
+            loop="loop"
+            id="myaudio"
+            preload="auto" 
+            @timeupdate="getMusicTimes"
+            @pause="getPauseState"
+            @play="getPlayState"
+        >
             <source :src="playMusicBox.nowMusicUrl[ playMusicBox.musicIndex ]" type="audio/ogg" id="audioURL">
         </audio>
 
-            <!-- 进度条      @timeupdate="myTryStyleTest" @durationchange="getMusicAllTime" -->
+            <!-- 进度条       @durationchange="getMusicAllTime" -->
 
             
         
@@ -18,41 +25,17 @@ export default {
     name: 'player',
     data () {
         return {
-            // nowMusic: this.MusicOne,
-            // nextMusic: this.MusicTwo,
-            // musicUrl: '../../static/music/泡沫.mp3',
-
-            // 控制进度条数据
-            nowMusicTime: 0,
-            // 歌曲当前时间
-            thisMusicTime: 0,
-            // 歌曲总时间
-            allMusicTime: 0,
-            // 暂停清除计时器
-            planTimes: false,
+            musicNum: 0
         }
     },
     computed: {
         ...mapState({
             playMusicBox: 'playmusic'
         }),
-        // 获取dom
         media () {
-            // audio
-            return document.getElementById('myaudio');
+            return document.querySelector('#myaudio')
         },
-        musicPlanBack () {
-            // 进度条背景
-            return document.getElementsByClassName('musicPlanBack')[0];
-        },
-        musicSlot () {
-            // 进度条点
-            return document.getElementsByClassName('musicSlot')[0];
-        },
-        planLength () {
-            // 进度条
-            return document.querySelector('.musicPlan');
-        },
+
     },
     mounted () {
         // 获取歌曲信息
@@ -69,6 +52,21 @@ export default {
 
     },
     methods: {
+        // 记录歌曲进度
+        getMusicTimes () {
+            let num = Math.floor(this.media.currentTime)
+            if (num != this.musicNum) {
+                this.musicNum = num
+                this.$store.commit('setMusicTimes', num)
+            }
+        },
+        // 记录暂停
+        getPauseState () {
+            this.$store.commit('setPauseState', true)
+        },
+        getPlayState () {
+            this.$store.commit('setPauseState', false)
+        },
         // 时间格式过滤，秒化为分秒,0:00
         secToMin (num) {
             let m = parseInt(num/60),

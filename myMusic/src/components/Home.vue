@@ -211,6 +211,8 @@ export default {
     .myflex-item {
         width: 33%;
         overflow-x: hidden;
+        font-size: 14px;
+        color: #555;
     }
     .my-test-style {
         width: 100px;

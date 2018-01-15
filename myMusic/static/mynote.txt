@@ -90,3 +90,6 @@ console.log(Object.prototype.toString.call(obj)==='[object Function]')    //true
 笔记： 未完成： 1，播放页面的背景图片动态更换
                 2， 播放页面的按钮功能和界面优化
                 3，搜索结果的优化，没有结果的时候给提示
+                4, 添加歌手，排行榜等
+
+                新功能： 歌词部分

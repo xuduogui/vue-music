@@ -1,45 +1,67 @@
 <template>
-    <div style="height: 500px;">
-        <mt-swipe :auto="0" :speed="50">
+    <div class="all-player-box" id="bigPlayerBox">
+		<!-- 背景 -->
+		<div class="background-img">
+			<img src="../assets/logo.png" alt="" width="100%" height="100%" class="play-back-filter">
+		</div>
+
+		<div style="height: 500px;">
+			<mt-swipe :auto="0" :speed="50">
+				
+				<mt-swipe-item class="play-back-box">
 			
-            <mt-swipe-item class="play-back-box">
-				<!-- 背景 -->
-				<div>
-					<img src="../assets/logo.png" alt="" width="100%" height="100%" class="play-back-filter">
-				</div>
-				<!-- 黑圈 -->
-				<div class="play-back-blackbox">
 					
-					<!-- 图片,旋转体 -->
-					<div class="play-back-img">
-						<img src="../assets/musicbox.png" alt="" class="play-back-blackimg">
-						<div class="play-back-musicimg">
-							<img src="../assets/sea.jpg" alt="" width="184" height="184">
+					<!-- 黑圈 -->
+					<div class="play-back-blackbox">
+						
+						<!-- 图片,旋转体 -->
+						<div class="play-back-img">
+							<img src="../assets/musicbox.png" alt="" class="play-back-blackimg">
+							<div class="play-back-musicimg">
+								<img src="../assets/sea.jpg" alt="" width="184" height="184">
+							</div>
 						</div>
 					</div>
-				</div>
-				<!-- 播放暂停标志 -->
-				<div class="play-back-flag" v-show="mytest">
-					<img src="../assets/playMusicBig.png" alt="" width="56" @click="playAudio">
-				</div>
-			</mt-swipe-item>
-            <mt-swipe-item style="top: 0; z-index: 1000;">
-				<myplaylist style="width: 100%; height: 100%;"></myplaylist>
-			</mt-swipe-item>
-            <mt-swipe-item>3</mt-swipe-item>
-        </mt-swipe>
+					<!-- 播放暂停标志 -->
+					<div class="play-back-flag" v-show="mytest">
+						<img src="../assets/playMusicBig.png" alt="" width="56" @click="playAudio">
+					</div>
+				</mt-swipe-item>
+				<mt-swipe-item style="top: 0; z-index: 1000;">
+					<!-- 播放列表 -->
+					<myplaylist style="width: 100%; height: 100%;"></myplaylist>
+				</mt-swipe-item>
+				<mt-swipe-item style="top: 0; z-index: 1000;">
+					<!-- 歌词 -->
+					<musiclyric style="width: 100%; height: 100%;"></musiclyric>
+				</mt-swipe-item>
+			</mt-swipe>
+		</div>
+        
 		<!-- 播放控件 -->
 		<div>
 			<!-- 进度条 -->
 			<div></div>
 			<!-- 控制台 -->
-			<div>
-				<button @click="setPlayMode">播放模式</button>
-				<button @click="newMusic">下一首</button>
-				<button>上一首</button>
-				<button @click="playAudio">播放/暂停</button>
+			<div class="control-bus">
+				
+				<!-- 上一首 -->
 				<div>
-					{{ playMode }}
+					<img src="../assets/leftMusic.png" alt="">
+				</div>
+				<!-- 播放/暂停 -->
+				<div @click="playAudio">
+					<img src="../assets/playButton.png" alt="" v-if="!mytest">
+					<img src="../assets/pauseMusic.png" alt="" v-else>
+				</div>
+				<!-- 下一首 -->
+				<div @click="newMusic">
+					<img src="../assets/nextMusic.png" alt="">
+				</div>
+				<!-- 模式 -->
+				<div @click="setPlayMode" class="loop-mode">
+					<img src="../assets/loopPlay.png" alt="">
+					<span>{{ playMode }}</span>
 				</div>
 			</div>
 		</div>
@@ -58,10 +80,12 @@
 <script>
 import { mapState } from 'vuex'
 import myplaylist from "./PlayList/myPlayList";
+import musiclyric from "./PlayLyric/playLyric";
 export default {
 	name: 'playmusic',
 	components: { 
 		myplaylist,
+		musiclyric,
 	},
     
     data () {
@@ -70,7 +94,11 @@ export default {
 			playMode: '顺序',
 			playModeNum: 0,
 
-			mytest: false
+			mytest: this.$store.state.playmusic.pauseState,
+			// backgroundImg: {
+			// 	width: '100%',
+			// 	height: document.body.clientHeight + 'px'
+			// }
         }
     },
     computed: {
@@ -92,6 +120,14 @@ export default {
 		// 获取歌曲信息
 		// 设置播放列表，根据歌单列表
 		this.$store.commit('updataUrl', this.myPlayList.musicID)
+		// console.log(this.$route.params.id)
+		// 获取歌词
+		this.$store.dispatch('GETLYRICMSG', this.$route.params.id)
+
+		// 设置盒子高度
+		let box = document.querySelector('#bigPlayerBox')
+		box.style.height = window.innerHeight - 40 + 'px'
+		// console.log(window.screen.availHeight)
     },
     watch: {
 
@@ -225,9 +261,23 @@ export default {
 </script>
 
 <style scoped>
+	.all-player-box {
+		width: 100%;
+		overflow: hidden;
+	}
+	.background-img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: -9999;
+		width: 100%;
+		height: 100%;
+		background: #555;
+		overflow: hidden;
+	}
 	.play-back-box {
 		position: relative;
-		background: #888;
+		/* background: #888; */
 	}
     .play-back-filter {
 		-webkit-filter: blur(50px);
@@ -282,6 +332,28 @@ export default {
 	{
 	from { transform: rotate(0deg);}
 	to { transform: rotate(360deg);}
+	}
+
+	.control-bus {
+		position: absolute;
+		bottom: 0;
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+	}
+	.control-bus img {
+		width: 100%;
+	}
+	.loop-mode {
+		position: relative;
+	}
+	.loop-mode span {
+		position: absolute;
+		width: 100%;
+		top: 33%;
+		left: 35%;
+		font-size: 12px;
+		color: #bbb;
 	}
 </style>
 

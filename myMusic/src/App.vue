@@ -2,7 +2,7 @@
   <div id="app">
     <!-- 头部导航控件 -->
     <div>
-      <mt-header title="灵 乐 宫">
+      <mt-header title="灵 乐 宫" class="head-index">
         <!-- 非主页 -->
         <router-link to="/" slot="left" v-if="!$store.state.home.homeFlag">
           <mt-button icon="back">返回</mt-button>
@@ -12,6 +12,7 @@
           <mt-button>搜索</mt-button>
         </router-link>
         <!-- <mt-button icon="more" slot="right"></mt-button> -->
+        <!-- 进入播放页面 -->
         <router-link slot="right" :to="'/PlayMusic/' + musicIDs[ idIndex ]">
           <mt-button icon="more"></mt-button>
         </router-link>
@@ -42,13 +43,15 @@ export default {
     return {
       searchValue: '',
       musicIDs: this.$store.state.playlist.musicID,
-      idIndex: this.$store.state.playmusic.musicIndex
     }
   },
   computed: {
+    idIndex () {
+      return this.$store.state.playmusic.musicIndex
+    }
   },
   mounted () {
-
+    console.log(this.idIndex)
   },
   components: { 
     player,
@@ -57,5 +60,12 @@ export default {
 </script>
 
 <style>
-
+  /* .head-index {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 9999;
+  } */
 </style>
