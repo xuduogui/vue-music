@@ -41,7 +41,11 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 
 
-目前项目尚未上线，可以下载后打包，将此项目dist文件夹中的所有文件复制，放入后台程序（另外的程序，见下）的public文件夹
+目前项目尚未上线，只能预览单页
+
+项目地址： https://xuduogui.github.io/xuduogui.io/vuemusic/index.html
+
+如果需要体验完整功能，可以下载后打包，将此项目dist文件夹中的所有文件复制，放入后台程序（另外的程序，见下）的public文件夹
 
 后台程序我是直接使用了别人的，这里非常感谢该作者提供的帮助
 
