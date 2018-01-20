@@ -41,7 +41,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 
 
-目前项目尚未上线，只能预览单页
+目前项目尚未上线，只能预览单页，建议使用浏览器F12，调用手机模拟预览
 
 项目地址： https://xuduogui.github.io/xuduogui.io/vuemusic/index.html
 
