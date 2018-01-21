@@ -8,6 +8,9 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+// 引入自己修改的mint-ui的css样式
+// import './assets/css/my-mint.scss';
+
 Vue.use(MintUI)
 
 Vue.prototype.$http = axios;

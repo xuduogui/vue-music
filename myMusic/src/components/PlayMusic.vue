@@ -41,7 +41,15 @@
 		<!-- 播放控件 -->
 		<div>
 			<!-- 进度条 -->
-			<div></div>
+			<div>
+				<mt-range
+					v-model="rangeValue"
+					:min="0"
+					:max="100"
+					:step="1"
+					:bar-height="5">
+				</mt-range>
+			</div>
 			<!-- 控制台 -->
 			<div class="control-bus">
 				
@@ -90,7 +98,7 @@ export default {
     
     data () {
         return {
-			rangeValue: 100,
+			rangeValue: 50,
 			playMode: '顺序',
 			playModeNum: 0,
 

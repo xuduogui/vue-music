@@ -1,20 +1,20 @@
 <template>
   <div id="app">
     <!-- 头部导航控件 -->
-    <div>
+    <div v-if="$store.state.home.homeFlag">
       <mt-header title="灵 乐 宫" class="head-index">
         <!-- 非主页 -->
-        <router-link to="/" slot="left" v-if="!$store.state.home.homeFlag">
+        <!-- <router-link to="/" slot="left" v-if="!$store.state.home.homeFlag">
           <mt-button icon="back">返回</mt-button>
-        </router-link>
+        </router-link> -->
         <!-- 主页 -->
-        <router-link to="SearchBox" slot="left" v-if="$store.state.home.homeFlag">
+        <router-link to="SearchBox" slot="left">
           <mt-button>搜索</mt-button>
         </router-link>
         <!-- <mt-button icon="more" slot="right"></mt-button> -->
         <!-- 进入播放页面 -->
         <router-link slot="right" :to="'/PlayMusic/' + musicIDs[ idIndex ]">
-          <mt-button icon="more"></mt-button>
+          <mt-button>Music</mt-button>
         </router-link>
       </mt-header>
     </div>

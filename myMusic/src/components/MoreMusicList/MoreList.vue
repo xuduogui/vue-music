@@ -1,5 +1,12 @@
 <template>
     <div>
+        <div class="head-top">
+            <div class="hot-music">
+                <!-- 头部 -->
+                
+            </div>
+        </div>
+
         <div style="width: 100%;">
             <ul class="myflex-box">
                 <li
@@ -86,6 +93,24 @@ export default {
         overflow-x: hidden;
         font-size: 14px;
         color: #555;
+    }
+    .head-top {
+        position: relative;
+        padding-top: 38.9%;
+        overflow: hidden;
+        background: url('http://s3.music.126.net/m/s/img/hot_music_bg_2x.jpg?f01a252389c26bcf016816242eaa6aee') no-repeat;
+        background-size: contain;
+        background-color: rgba(0,0,0,.2);
+    }
+    .hot-music {
+        position: absolute;
+        top: 30%;
+        left: 10%;
+        width: 95px;
+        height: 67px;
+        background: url('http://s3.music.126.net/m/s/img/index_icon_2x.png?5207a28c3767992ca4bb6d4887c74880') no-repeat;
+        background-size: 166px 97px;
+        background-position: -24px -30px;
     }
 </style>
 

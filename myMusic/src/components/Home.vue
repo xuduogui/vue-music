@@ -52,12 +52,12 @@
             <div>最新歌单</div>
             <div>更多</div>
         </div>
-        <!-- 热门歌单，限制6个 -->
+        <!-- 最新歌单，限制6个 -->
         <div style="width: 100%;">
             <ul class="myflex-box">
                 <li
                     class="myflex-item"
-                    v-for="(item,index) in mystate.playListID"
+                    v-for="(item, index) in mystate.playListID"
                     v-if="index > 9 && index < 16"
                     @click="routePlayList(index)"
                 >
