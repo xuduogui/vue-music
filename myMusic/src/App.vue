@@ -2,7 +2,7 @@
   <div id="app">
     <!-- 头部导航控件 -->
     <div v-if="$store.state.home.homeFlag">
-      <mt-header title="灵 乐 宫" class="head-index">
+      <mt-header title="" class="head-index">
         <!-- 非主页 -->
         <!-- <router-link to="/" slot="left" v-if="!$store.state.home.homeFlag">
           <mt-button icon="back">返回</mt-button>
@@ -60,12 +60,12 @@ export default {
 </script>
 
 <style>
-  /* .head-index {
-    position: absolute;
+  .head-index {
+    /* position: absolute;
     width: 100%;
     top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0);
-    z-index: 9999;
-  } */
+    left: 0; */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* z-index: 9999; */
+  }
 </style>

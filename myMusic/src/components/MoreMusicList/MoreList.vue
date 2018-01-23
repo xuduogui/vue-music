@@ -14,7 +14,10 @@
                     v-for="( item, index ) in mystate.playListID"
                     @click="routePlayList( index )"
                 >
-                    <img v-lazy="mystate.playListPic[ index ]" alt="" width="100%">
+                    <img 
+                        v-lazy="mystate.playListPic[ index ]"
+                        width="100%"
+                        :style="{ maxHeight: maxHeight + 'px' }">
                     <div>
                         {{mystate.playListName[ index ]}}
                     </div>
@@ -47,6 +50,9 @@ export default {
         ...mapState({
             mystate: 'home'
         }),
+        maxHeight () {
+            return window.innerWidth/3
+        }
     },
     methods: {
         // 获取数据

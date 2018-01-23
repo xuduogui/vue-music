@@ -6,9 +6,9 @@ const state = {
         author: '歌单作者',
         authorUrl: '../../assets/logo.png'
     },
-    musicID: ['单曲ID'],
-    musicName: ['单曲name'],
-    musicSinger: ['歌手名字'],
+    musicID: ['531051217'],
+    musicName: ['等你下课'],
+    musicSinger: ['周杰伦'],
 }
 const mutations = {
     setMusicID(state, str) {

@@ -5,6 +5,7 @@
             id="myaudio"
             preload="auto" 
             @timeupdate="getMusicTimes"
+            @durationchange="getMusicAllTime"
             @pause="getPauseState"
             @play="getPlayState"
         >
@@ -12,9 +13,6 @@
         </audio>
 
             <!-- 进度条       @durationchange="getMusicAllTime" -->
-
-            
-        
 
     </div>
 </template>
@@ -30,7 +28,8 @@ export default {
     },
     computed: {
         ...mapState({
-            playMusicBox: 'playmusic'
+            playMusicBox: 'playmusic',
+            needID: 'playlist'
         }),
         media () {
             return document.querySelector('#myaudio')
@@ -64,9 +63,17 @@ export default {
         getPauseState () {
             this.$store.commit('setPauseState', true)
         },
+        // 记录播放
         getPlayState () {
             this.$store.commit('setPauseState', false)
         },
+
+        // 监听歌曲长度
+        getMusicAllTime () {
+            let num = this.media.duration
+            this.$store.commit('setMusicDuration', num)
+        },
+
         // 时间格式过滤，秒化为分秒,0:00
         secToMin (num) {
             let m = parseInt(num/60),

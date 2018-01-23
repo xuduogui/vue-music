@@ -5,12 +5,10 @@
 			<img src="../assets/logo.png" alt="" width="100%" height="100%" class="play-back-filter">
 		</div>
 
-		<div style="height: 500px;">
+		<div style="height: 80%;">
 			<mt-swipe :auto="0" :speed="50">
 				
 				<mt-swipe-item class="play-back-box">
-			
-					
 					<!-- 黑圈 -->
 					<div class="play-back-blackbox">
 						
@@ -27,14 +25,17 @@
 						<img src="../assets/playMusicBig.png" alt="" width="56" @click="playAudio">
 					</div>
 				</mt-swipe-item>
+
 				<mt-swipe-item style="top: 0; z-index: 1000;">
 					<!-- 播放列表 -->
 					<myplaylist style="width: 100%; height: 100%;"></myplaylist>
 				</mt-swipe-item>
+
 				<mt-swipe-item style="top: 0; z-index: 1000;">
 					<!-- 歌词 -->
 					<musiclyric style="width: 100%; height: 100%;"></musiclyric>
 				</mt-swipe-item>
+
 			</mt-swipe>
 		</div>
         
@@ -42,19 +43,37 @@
 		<div>
 			<!-- 进度条 -->
 			<div>
-				<mt-range
-					v-model="rangeValue"
-					:min="0"
-					:max="100"
-					:step="1"
-					:bar-height="5">
-				</mt-range>
+				<div>
+					<!-- 进度条上方数字 -->
+					<div class="range-math">
+						<div>{{ secToMin(playMusicBox.musicTimes) }}</div>
+						<div>{{ secToMin(playMusicBox.musicDuration) }}</div>
+					</div>
+				</div>
+				<!-- 背景 -->
+				<div
+					class="range-back"
+					@click="rangeBackTouch">
+					<!-- 已播放背景 -->
+					<div
+						class="range-slot-right"
+						:style="{ width: mediaTimes * rangeWidth + 'px' }">
+					</div>
+					<!-- 小点 -->
+					<div
+						class="range-slot"
+						:style="{ left: mediaTimes * rangeWidth + 'px' }"
+						@touchmove="rangeFollow"
+						@touchstart="rangeStart"
+						@touchend="rangeEnd">
+					</div>
+				</div>
 			</div>
 			<!-- 控制台 -->
 			<div class="control-bus">
 				
 				<!-- 上一首 -->
-				<div>
+				<div @click="preMusic" v-if="playMusicBox.musicIndex > 0">
 					<img src="../assets/leftMusic.png" alt="">
 				</div>
 				<!-- 播放/暂停 -->
@@ -65,6 +84,12 @@
 				<!-- 下一首 -->
 				<div @click="newMusic">
 					<img src="../assets/nextMusic.png" alt="">
+				</div>
+				<!-- 站位 -->
+				<div v-if="playMusicBox.musicIndex < 1">
+					<div style="width: 70px; height: 20px;">
+
+					</div>
 				</div>
 				<!-- 模式 -->
 				<div @click="setPlayMode" class="loop-mode">
@@ -98,15 +123,13 @@ export default {
     
     data () {
         return {
-			rangeValue: 50,
+			// rangeValue: this.playMusicBox.musicTimes,
 			playMode: '顺序',
 			playModeNum: 0,
-
+			// 暂停信号
 			mytest: this.$store.state.playmusic.pauseState,
-			// backgroundImg: {
-			// 	width: '100%',
-			// 	height: document.body.clientHeight + 'px'
-			// }
+			// 拖动初始记录
+			touchScale: 1,
         }
     },
     computed: {
@@ -114,13 +137,29 @@ export default {
 			playMusicBox: 'playmusic',
 			myPlayList: 'playlist'
         }),
-        // 获取dom
+        // 获取audio对象
         media () {
             // audio
             return this.playMusicBox.media
 		},
+		// 动画对象
 		isMusicAnimation () {
 			return document.querySelector('.play-back-img')
+		},
+		// 进度比
+		mediaTimes () {
+			return this.playMusicBox.musicTimes / this.playMusicBox.musicDuration
+		},
+		// 速度比
+		mediaSpeed () {
+			return this.playMusicBox.musicDuration / window.innerWidth
+		},
+		// 获取音乐进度条宽度
+		rangeWidth () {
+			return  window.innerWidth
+		},
+		duration () {
+			return this.playMusicBox.musicDuration
 		}
 		
     },
@@ -134,13 +173,45 @@ export default {
 
 		// 设置盒子高度
 		let box = document.querySelector('#bigPlayerBox')
-		box.style.height = window.innerHeight - 40 + 'px'
+		box.style.height = window.innerHeight + 'px'
 		// console.log(window.screen.availHeight)
     },
     watch: {
-
+		duration () {
+			// 长度改变，获取歌词
+            this.$store.dispatch('GETLYRICMSG', this.myPlayList.musicID[ this.playMusicBox.musicIndex] )
+		}
     },
     methods: {
+		// 移动端拖动事件
+		rangeFollow (e) {
+			this.rangeEvent(e)
+		},
+		// touchstart
+		rangeStart (e) {
+			this.touchScale = this.mediaSpeed
+		},
+		// touchend
+		rangeEnd (e) {
+			this.rangeEvent(e)
+		},
+		// 背景
+		rangeBackTouch (e) {
+			let num =  e.clientX * this.mediaSpeed
+			this.eventSetNum(num)
+		},
+		// 滚动事件
+		rangeEvent(e) {
+			let num = e.changedTouches[0].clientX * this.mediaSpeed
+			this.eventSetNum(num)
+		},
+		// 滚动赋值
+		eventSetNum (num) {
+			this.$store.commit('setMusicTimes', num)
+			this.media.currentTime = this.playMusicBox.musicTimes
+		},
+
+
         // 时间格式过滤，秒化为分秒,0:00
         secToMin (num) {
             let m = parseInt(num/60),
@@ -203,20 +274,18 @@ export default {
         // 下一首，直接播放
         newMusic () {
             // 下一首i: 0 顺序 1 随机 2 循环 3 单曲
-			this.$store.commit('orderMusicIndex',this.playModeNum)
+			this.$store.commit('orderMusicIndex', this.playModeNum)
 			
             this.media.setAttribute('autoplay', 'autoplay')
 			this.media.load()
-        },
-        // 将新的歌曲长度记录,获取速度
-        thisMusicLength () {
-            return this.planLength.clientWidth/this.media.duration
-        },
-        // 设置当前进度
-        setThisTime () {
-            let time = document.querySelector('#musicTime')
-            this.media.currentTime = time.value
-        },
+		},
+		// 上一首
+		preMusic () {
+			// 暂时只做顺序
+			this.$store.commit('preMusicIndex')
+			this.media.setAttribute('autoplay', 'autoplay')
+			this.media.load()
+		},
         // 前进5秒
         addMusicTime () {
             this.media.currentTime += 5
@@ -229,46 +298,46 @@ export default {
         clearVioce () {
             this.media.muted = !this.media.muted
         },
-        // 获取歌曲总时间，监听歌曲总时间
-        getMusicAllTime () {
-            this.allMusicTime = this.media.duration
-        },
-        // dom操作,监听进度条事件
-        myTryStyleTest () {
-            // 获取速度
-            let unitLength = this.thisMusicLength()
-            // 确定像素值
-            this.nowMusicTime = this.media.currentTime*unitLength
-            // 修改dom
-            this.musicPlanBack.style.width = this.nowMusicTime + 'px'
-            this.musicSlot.style.left = this.nowMusicTime + 'px'
-            // 修改进度时间
-            this.thisMusicTime = this.media.currentTime
-        },
-
-        // 进度条拖动事件
-        planOnDrag () {
-            let x = event.clientX
-            // 过滤数据，计算进度条左边距离
-            let num = this.getElementLfte(this.planLength)
-            // 获取速度
-            let unitLength = this.thisMusicLength()
-            // 修改歌曲实际进度
-            this.media.currentTime = ( x - num ) / unitLength
-        },
-        // 显示歌曲信息
-        showMusicMsg () {
-            console.log("音量:"+this.media.volume,"进度："+this.media.currentTime,"歌曲长度："+this.media.duration)
-            console.log(this.media.seekable,this.media.controls)
-            console.log(event.clientX)
-            console.log(this.planLength.clientWidth)
-            console.log(this.thisMusicLength())
-        }
     }
 }
 </script>
 
 <style scoped>
+	/* 进度条 */
+	.range-back {
+		width: 99.99%;
+		height: 2px;
+		background: rgba(11, 175, 204, .5);
+		border-top: 1px solid rgb(141, 143, 30);
+		border-bottom: 1px solid #444;
+		border-right: none;
+		border-left: none;
+		position: relative;
+	}
+	.range-slot-right {
+		position: absolute;
+		top: 0;
+		width: 20px;
+		height: 2px;
+		background: rgba(31, 122, 36, .5);
+	}
+	.range-slot {
+		width: 6px;
+		height: 6px;
+		border-radius: 3px;
+		background: rgb(51, 93, 128);
+		position: absolute;
+		top: -2px;
+		left: 20px;
+	}
+	/* 进度条数值 */
+	.range-math {
+		display: flex;
+		justify-content: space-between;
+		font-size: 12px;
+		color: rgba(232, 235, 204, 0.808);
+	}
+
 	.all-player-box {
 		width: 100%;
 		overflow: hidden;
@@ -363,6 +432,8 @@ export default {
 		font-size: 12px;
 		color: #bbb;
 	}
+
+	
 </style>
 
 

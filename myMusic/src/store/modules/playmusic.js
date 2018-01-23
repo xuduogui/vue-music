@@ -8,6 +8,8 @@ const myRoot = {
     musicLyric: '',
     // 歌曲进度
     musicTimes: 0,
+    // 歌曲长度、
+    musicDuration: 0,
     // 暂停？
     pauseState: true
 }
@@ -37,7 +39,7 @@ const mutations = {
             case 1:
                 // 随机
                 let num = Math.random()
-                let floorNum = state.nowMusicUrl.length*num
+                let floorNum = state.nowMusicUrl.length * num
                 state.musicIndex = Math.floor(floorNum)
                 break;
             case 2:
@@ -54,6 +56,10 @@ const mutations = {
                 alert('播放模式模块错误')
                 break;
         }
+    },
+    // 上一首播放，暂时只做了顺序
+    preMusicIndex (state) {
+        state.musicIndex--
     },
     // 播放暂停
     playAudio({ media }) {
@@ -89,7 +95,12 @@ const mutations = {
     // 修改歌词
     updataLyric (state, lrc) {
         state.musicLyric = lrc
-        console.log(state.musicLyric)
+    },
+    // 修改歌词进度状态
+    updataLyricFlag ({ musicLyric }, { index, bol }) {
+        if (musicLyric[ index ]) {
+            musicLyric[ index ].flag = bol
+        }
     },
     // 修改歌曲进度
     setMusicTimes (state, num) {
@@ -98,6 +109,10 @@ const mutations = {
     // 修改暂停状态
     setPauseState (state, bol) {
         state.pauseState = bol
+    },
+    // 修改歌曲长度
+    setMusicDuration (state, num) {
+        state.musicDuration = num
     }
 }
 
@@ -107,7 +122,7 @@ const actions = {
         let url = '/lyric?id=' + id
         dispatch('MYHTTPlyric', url).then(res => {
             // 处理数据
-            let obj = err.data.lrc.lyric
+            let obj = res.data.lrc.lyric
             // 解析歌词，commit
             dispatch('PARSELYRIC', obj)
         },err => {
@@ -134,6 +149,12 @@ const actions = {
                 var time = min * 60 + sec;
                 lrcObj[time] = clause;
             }
+        }
+
+        // 添加状态
+        let num = 0;
+        for (let item in lrcObj) {
+            lrcObj[item] = Object.assign({}, { msg: lrcObj[item] }, { flag: false }, { index: num++})
         }
         // 修改歌词
         commit('updataLyric', lrcObj)

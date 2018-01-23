@@ -36,7 +36,10 @@
                     v-if="index < 6"
                     @click="routePlayList(index)"
                 >
-                    <img :src="mystate.playListPic[index]" alt="" width="100%">
+                    <img
+                        :src="mystate.playListPic[index]"
+                        alt="" width="100%"
+                        :style="{ maxHeight: maxHeight + 'px' }">
                     <div>
                         {{mystate.playListName[index]}}
                     </div>
@@ -61,7 +64,11 @@
                     v-if="index > 9 && index < 16"
                     @click="routePlayList(index)"
                 >
-                    <img :src="mystate.playListPic[index]" alt="" width="100%">
+                    <img
+                        :src="mystate.playListPic[index]"
+                        alt=""
+                        width="100%"
+                        :style="{ maxHeight: maxHeight + 'px' }">
                     <div>
                         {{mystate.playListName[index]}}
                     </div>
@@ -115,6 +122,9 @@ export default {
         ...mapState({
             mystate: 'home'
         }),
+        maxHeight () {
+            return window.innerWidth/3
+        }
     },
     mounted () {
         // 清空歌单数据

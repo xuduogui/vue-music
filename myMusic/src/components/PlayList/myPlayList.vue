@@ -51,6 +51,8 @@ export default {
         width: 100%;
         height: 100%;
         overflow: auto;
+        font-size: 13px;
+        color: antiquewhite;
     }
     .newclass {
         border: 1px solid #000;
