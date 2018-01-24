@@ -3,20 +3,25 @@
         <!-- 搜索 -->
         <!-- 常用歌单，或者自己的歌单 -->
         <!-- 轮播 -->
-        <div style="height: 200px;">
+        <div style="height: 180px;">
             <mt-swipe :auto="4000">
-                <mt-swipe-item>
-                    <div style="background: #eee; width: 100%; height: 100%;"></div>
+                <mt-swipe-item
+                    v-for="item in swipeMsg"
+                    :key="item">
+                    <img :src="item" alt="" width="100%" height="100%">
+                    <!-- <div style="background: #eee; width: 100%; height: 100%;"></div> -->
                 </mt-swipe-item>
-                <mt-swipe-item>
+                <!-- <mt-swipe-item>
                     <div style="background: #111; width: 100%; height: 100%;"></div>
                 </mt-swipe-item>
                 <mt-swipe-item>
                     <div style="background: #888; width: 100%; height: 100%;"></div>
-                </mt-swipe-item>
+                </mt-swipe-item> -->
             </mt-swipe>
         </div>
 
+        <!-- 导航 -->
+        <home-index></home-index>
         
         <!-- 歌单 -->
         <div
@@ -111,11 +116,21 @@
 <script>
 import { mapState } from 'vuex'
 import { mapActions } from "vuex"
+import homeIndex from "./Home/homeIndex";
 export default {
+    components: {
+        homeIndex,
+    },
     name: 'home',
     data () {
         return {
-            searchMusic: ""
+            searchMusic: "",
+            swipeMsg: [
+                'http://p1.music.126.net/pGEfHqRglm3s7D7e__N5yg==/109951163117191849.jpg',
+                'http://p1.music.126.net/7xdpLTETRNFZU-l6VaxGdw==/109951163116909809.jpg',
+                'http://p1.music.126.net/Ylu0auO-x-g5oZdj-0u7sw==/109951163116381717.jpg',
+                'http://p1.music.126.net/2ExD2IfacOEUYpINejaZwA==/109951163112383419.jpg'
+            ]
         }
     },
     computed: {

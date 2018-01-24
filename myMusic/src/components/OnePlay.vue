@@ -8,11 +8,12 @@
             @durationchange="getMusicAllTime"
             @pause="getPauseState"
             @play="getPlayState"
+           
         >
             <source :src="playMusicBox.nowMusicUrl[ playMusicBox.musicIndex ]" type="audio/ogg" id="audioURL">
         </audio>
 
-            <!-- 进度条       @durationchange="getMusicAllTime" -->
+            <!-- 进度条    @ended="getPlayEnd"    @durationchange="getMusicAllTime" -->
 
     </div>
 </template>
@@ -38,13 +39,14 @@ export default {
     },
     mounted () {
         // 获取歌曲信息
-        console.log(
-            "audio: " + this.media,
-            "进度条背景" + this.musicPlanBack,
-            "进度条点：" + this.musicSlot,
-            "进度条：" + this.planLength
-        )
+        // console.log(
+        //     "audio: " + this.media,
+        //     "进度条背景" + this.musicPlanBack,
+        //     "进度条点：" + this.musicSlot,
+        //     "进度条：" + this.planLength
+        // )
         // this.$store.state.playmusic.media = this.media
+        // 暴露audioAPI
         this.$store.commit('setMedia', this.media)
     },
     watch: {

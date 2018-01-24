@@ -3,13 +3,15 @@ const myRoot = {
     // 当前播放的序号
     musicIndex: 0,
     // 播放列表（地址）
-    nowMusicUrl: ['../../static/music/泡沫.mp3'],
+    nowMusicUrl: ['http://music.163.com/song/media/outer/url?id=531051217.mp3'],
     // 歌词
     musicLyric: '',
     // 歌曲进度
     musicTimes: 0,
     // 歌曲长度、
     musicDuration: 0,
+    // 播放模式
+    playMode: 0,
     // 暂停？
     pauseState: true
 }

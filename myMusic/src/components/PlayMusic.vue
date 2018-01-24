@@ -45,10 +45,16 @@
 			<div>
 				<div>
 					<!-- 进度条上方数字 -->
-					<div class="range-math">
+					<div class="range-math" v-if="playMusicBox.musicTimes > 0 || mytest">
 						<div>{{ secToMin(playMusicBox.musicTimes) }}</div>
 						<div>{{ secToMin(playMusicBox.musicDuration) }}</div>
 					</div>
+					<!-- 加载中图标 -->
+					<mt-spinner
+						v-else
+						:size="12"
+						:type="1">
+					</mt-spinner>
 				</div>
 				<!-- 背景 -->
 				<div
@@ -71,6 +77,10 @@
 			</div>
 			<!-- 控制台 -->
 			<div class="control-bus">
+
+				<div>
+					<img src="../assets/collect.png" alt="">
+				</div>
 				
 				<!-- 上一首 -->
 				<div @click="preMusic" v-if="playMusicBox.musicIndex > 0">
@@ -94,7 +104,10 @@
 				<!-- 模式 -->
 				<div @click="setPlayMode" class="loop-mode">
 					<img src="../assets/loopPlay.png" alt="">
-					<span>{{ playMode }}</span>
+					<div>
+						<span>{{ playMode }}</span>
+					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -124,10 +137,11 @@ export default {
     data () {
         return {
 			// rangeValue: this.playMusicBox.musicTimes,
-			playMode: '顺序',
+			playMode: '顺',
+			// playModeNum: this.$store.state.playmusic.playMode,
 			playModeNum: 0,
 			// 暂停信号
-			mytest: this.$store.state.playmusic.pauseState,
+			// mytest: this.$store.state.playmusic.pauseState,
 			// 拖动初始记录
 			touchScale: 1,
         }
@@ -136,7 +150,11 @@ export default {
         ...mapState({
 			playMusicBox: 'playmusic',
 			myPlayList: 'playlist'
-        }),
+		}),
+		// 暂停信号
+		mytest () {
+			return this.$store.state.playmusic.pauseState
+		},
         // 获取audio对象
         media () {
             // audio
@@ -158,29 +176,43 @@ export default {
 		rangeWidth () {
 			return  window.innerWidth
 		},
+		// 歌曲长度
 		duration () {
 			return this.playMusicBox.musicDuration
+		},
+		hereMusicTimes () {
+			return this.playMusicBox.musicTimes
 		}
 		
     },
     mounted () {
-		// 获取歌曲信息
 		// 设置播放列表，根据歌单列表
 		this.$store.commit('updataUrl', this.myPlayList.musicID)
-		// console.log(this.$route.params.id)
 		// 获取歌词
 		this.$store.dispatch('GETLYRICMSG', this.$route.params.id)
+
+		// 设置动画状态
+		if (this.mytest) {
+			this.isMusicAnimation.style.animationPlayState="paused"
+		} else {
+			this.isMusicAnimation.style.animationPlayState="running"
+		}
 
 		// 设置盒子高度
 		let box = document.querySelector('#bigPlayerBox')
 		box.style.height = window.innerHeight + 'px'
-		// console.log(window.screen.availHeight)
     },
     watch: {
 		duration () {
 			// 长度改变，获取歌词
-            this.$store.dispatch('GETLYRICMSG', this.myPlayList.musicID[ this.playMusicBox.musicIndex] )
+			this.$store.dispatch('GETLYRICMSG', this.myPlayList.musicID[ this.playMusicBox.musicIndex] )
+		},
+		hereMusicTimes () {
+			if (this.duration - 1.5 < this.playMusicBox.musicTimes) {
+				this.newMusic()
+			}
 		}
+
     },
     methods: {
 		// 移动端拖动事件
@@ -234,7 +266,7 @@ export default {
         // 暂停/播放
         playAudio () {
             // 清除进度条计时器
-            if(this.media.paused) {
+            if(this.mytest) {
                 // 播放
 				this.media.play();
 				// animation running
@@ -245,7 +277,7 @@ export default {
 				// animation pasued
 				this.isMusicAnimation.style.animationPlayState="paused"
 			}
-			this.mytest = this.media.paused
+			// this.mytest = this.media.paused
 		},
 		// 设置播放模式
 		setPlayMode () {
@@ -256,16 +288,16 @@ export default {
 			}
 			switch (this.playModeNum) {
 				case 0:
-					this.playMode = '顺序'
+					this.playMode = '顺'
 					break;
 				case 1:
-					this.playMode = '随机'
+					this.playMode = '随'
 					break;
 				case 2:
-					this.playMode = '循环'
+					this.playMode = '循'
 					break;
 				case 3:
-					this.playMode = '单曲'
+					this.playMode = '单'
 					break;
 				default:
 					break;
@@ -423,16 +455,25 @@ export default {
 	}
 	.loop-mode {
 		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
-	.loop-mode span {
+	.loop-mode div {
 		position: absolute;
 		width: 100%;
-		top: 33%;
-		left: 35%;
-		font-size: 12px;
+		height: 100%;
+		top: 0;
+		left: 0;
+		font-size: 10px;
 		color: #bbb;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
-
+	.loop-mode div span {
+		padding: 0 5% 5% 0;
+	}
 	
 </style>
 

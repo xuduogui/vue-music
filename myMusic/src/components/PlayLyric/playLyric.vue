@@ -1,21 +1,38 @@
 <template>
-    <div class="lyric-box">
-        <!-- 歌词模板 -->
-        <!-- 歌名 -->
-        <div>{{ $store.state.playlist.musicName[ playmusic.musicIndex ] }}</div>
-        <ul>
-            <li
-                v-for="( item, index ) in lyricList"
-                :key="index"
-                class="lyric-plan"
-            >
-                <div :class="{ myplan: item.flag }">
-                    {{ item.msg }}
+    <div>
+        <div class="lyric-head">
+            <!-- 头部信息 -->
+            <!-- 后退 -->
+            <!-- <div>back</div> -->
+            <!-- 歌名 -->
+            <div>
+                <div style="font-size: 18px; color: #fff;">
+                    {{ $store.state.playlist.musicName[ playmusic.musicIndex ] }}
                 </div>
-            </li>
-        </ul>
+                <div style="font-size: 12px; color: #aaa;">
+                    {{ $store.state.playlist.musicSinger[ playmusic.musicIndex ] }}
+                </div>
+            </div>
+            
+        </div>
+        <div class="lyric-box">
+            <!-- 歌词模板 -->
+            
+            <ul>
+                <li
+                    v-for="( item, index ) in lyricList"
+                    :key="index"
+                    class="lyric-plan"
+                >
+                    <div :class="{ myplan: item.flag }">
+                        {{ item.msg }}
+                    </div>
+                </li>
+            </ul>
 
+        </div>
     </div>
+    
 </template>
 
 <script>
@@ -51,13 +68,12 @@ export default {
             // 根据进度做自动跟随歌词
             if (this.lyricList[ this.musicTimes ]) {
                 let idex = this.lyricList[ this.musicTimes ].index
-                if (this.myLi[idex-6]) {
+                if (this.myLi[idex-5]) {
                     // 调整滚动条
-                    this.myLi[idex-6].scrollIntoView()
+                    this.myLi[idex-5].scrollIntoView()
                 } else {
                     this.myLi[0].scrollIntoView()
                 }
-                // window.scrollBy(0, 20)
                 this.$store.commit('updataLyricFlag', { index: this.lastLyric, bol: false})
                 this.$store.commit('updataLyricFlag', { index: this.musicTimes, bol: true})
                 // 记录上一句歌词世间
@@ -81,6 +97,18 @@ export default {
     .lyric-box {
         position: relative;
         overflow-y: auto;
+        height: 90%;
+    }
+    .lyric-head {
+        width: 100%;
+        height: 10%;
+        display: flex;
+        justify-content: flex-start;
+        background: rgba(0, 0, 0, .1);
+    }
+    .lyric-head div {
+        padding: 1px 10px;
+        color: rgba(255, 255, 255, .5);
     }
     .lyric-plan {
         display: flex;
