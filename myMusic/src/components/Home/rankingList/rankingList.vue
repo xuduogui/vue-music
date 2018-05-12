@@ -1,11 +1,25 @@
 <template>
   <div>
-      rankinglist
+    <!-- rankinglist -->
+    <one-rank
+      v-for="list in 23"
+      :key="list"
+      :listNum='list'
+    ></one-rank>
   </div>
 </template>
 
 <script>
+import oneRank from "./oneRanking";
 export default {
-  name: 'rankinglist'
+  name: 'rankinglist',
+  components: {
+    oneRank
+  },
+  mounted () {
+    
+  },
+  beforeCreate () {
+  }
 }
 </script>

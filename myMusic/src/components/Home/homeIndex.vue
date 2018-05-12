@@ -1,10 +1,10 @@
 <template>
   <div class="my-head-index">
       <!-- 这里预计就一个模块 -->
-      <div @click="routeTo('FM')">私人FM</div>
+      <!-- <div @click="routeTo('FM')">私人FM</div>
       <div @click="routeTo('songsList')">歌单</div>
       <div @click="routeTo('rankingList')">排行榜</div>
-      <div @click="routeTo('singer')">歌手</div>
+      <div @click="routeTo('singer')">歌手</div> -->
   </div>
 </template>
 
